@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thiệp 20-10 💧</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    height:100%;
+    font-family:'Montserrat',sans-serif;
+    overflow:hidden;
+  }
+
+  /* Ảnh nền cố định */
+  body {
+    position: relative;
+    background: url('https://i.imgur.com/AvYd76x.jpeg') no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  /* Hiệu ứng liquid trong suốt */
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1), transparent 60%);
+    mix-blend-mode: screen;
+    animation: liquidMove 12s ease-in-out infinite alternate;
+    z-index:0;
+    pointer-events:none;
+  }
+  @keyframes liquidMove {
+    0% {background-position: 30% 30%, 70% 70%;}
+    100% {background-position: 40% 60%, 60% 40%;}
+  }
+
+  .login-box, .card {
+    position:relative;
+    z-index:1;
+    background:rgba(255,255,255,0.2);
+    border-radius:20px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    width:min(380px,90%);
+    margin:100px auto;
+    padding:30px;
+    color:white;
+    text-align:center;
+  }
+
+  h2{font-family:'Playfair Display',serif;margin-bottom:1rem;color:#fff;}
+  input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    margin:8px 0;
+    font-size:16px;
+    outline:none;
+    text-align:center;
+  }
+  button{
+    background:linear-gradient(90deg,#ff4d6d,#ff8aa2);
+    color:white;
+    border:none;
+    border-radius:30px;
+    padding:12px 24px;
+    margin-top:12px;
+    font-size:16px;
+    cursor:pointer;
+  }
+  button:hover{opacity:0.9;}
+  .hidden{display:none;}
+
+  /* Thiệp */
+  .card {
+    width:min(700px,95%);
+    color:#222;
+  }
+  .card h1{color:#7a2ae8;font-family:'Playfair Display',serif;margin-bottom:10px;}
+  .card p{margin-bottom:10px;line-height:1.6;}
+
+  .heart {
+    position:absolute;
+    width:14px;height:14px;
+    background:#ff4d6d;
+    transform:rotate(45deg);
+    animation:fall 6s linear infinite;
+    opacity:0.8;
+  }
+  .heart::before,.heart::after{
+    content:'';
+    position:absolute;
+    width:14px;height:14px;
+    background:#ff4d6d;
+    border-radius:50%;
+  }
+  .heart::before{left:-7px;}
+  .heart::after{top:-7px;}
+  @keyframes fall{
+    0%{transform:translateY(-20px) rotate(45deg);opacity:1;}
+    100%{transform:translateY(100vh) rotate(45deg);opacity:0;}
+  }
+
+  canvas#confetti{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* Nút nhạc */
+  #musicControl{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:rgba(255,255,255,0.4);
+    border:none;
+    border-radius:50%;
+    width:60px;height:60px;
+    backdrop-filter:blur(8px);
+    font-size:26px;
+    color:#ff4d6d;
+    cursor:pointer;
+    z-index:2;
+    display:none;
+  }
+</style>
+</head>
+<body>
+  <div class="login-box" id="loginBox">
+    <h2>Đăng nhập để xem thiệp 💌</h2>
+    <input type="text" id="username" placeholder="Tài khoản">
+    <input type="password" id="password" placeholder="Mật khẩu">
+    <button onclick="checkLogin()">Đăng nhập</button>
+    <p style="margin-top:10px;font-size:14px;">(Gợi ý: tài khoản <b>Thuytien</b> / mật khẩu <b>29/6/2010</b>)</p>
+  </div>
+
+  <div class="card hidden" id="card">
+    <h1>💐 Chúc mừng Ngày Phụ Nữ Việt Nam 20/10 💐</h1>
+    <p>Chúc Thủy Tiên có một ngày thật đặc biệt, rạng rỡ và ngập tràn niềm vui! 💖</p>
+    <p>Chúc bạn luôn cười thật tươi, gặp nhiều điều may mắn và được yêu thương thật nhiều 💫</p>
+    <p>Mong rằng mọi ước mơ của bạn sẽ thành hiện thực, và mỗi ngày đều ngập tràn năng lượng tích cực 🌸</p>
+    <p>Dù ở đâu hay làm gì, bạn vẫn luôn là cô gái tuyệt vời, đáng yêu và mạnh mẽ 🌷</p>
+    <p>Chúc bạn luôn xinh đẹp, hạnh phúc, và có thật nhiều người yêu quý quanh mình 💕</p>
+    <p>20/10 không chỉ là ngày để nhận hoa, mà là để bạn biết rằng bạn thật sự đặc biệt! 🌹</p>
+    <p>Hãy tận hưởng ngày hôm nay trọn vẹn nhé — vì bạn xứng đáng có được mọi điều tốt đẹp nhất! 🫶</p>
+    <p>💖 Những lời chúc này được gửi đến bạn từ <b>Hạng A Thành</b> 💌</p>
+  </div>
+
+  <canvas id="confetti"></canvas>
+  <button id="musicControl">🎵</button>
+
+  <audio id="bgMusic" loop>
+    <source src="https://docs.google.com/uc?export=download&id=1k0ylQxVnKZC8VJ5Ap5GKyUuRkT5V0GmT" type="audio/mpeg">
+  </audio>
+
+<script>
+function checkLogin(){
+  const user=document.getElementById("username").value.trim();
+  const pass=document.getElementById("password").value.trim();
+  if(user==="Thuytien" && pass==="29/6/2010"){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("card").classList.remove("hidden");
+    document.getElementById("musicControl").style.display='block';
+    startConfetti();
+    setInterval(spawnHeart,300);
+    playMusic();
+  } else {
+    alert("Sai tài khoản hoặc mật khẩu 💦");
+  }
+}
+
+/* Pháo hoa */
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+let W,H,particles=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+window.addEventListener("resize",resize);resize();
+function rand(a,b){return Math.random()*(b-a)+a;}
+function makeParticle(){return{x:rand(0,W),y:rand(0,H/2),vx:rand(-3,3),vy:rand(2,8),size:rand(4,8),color:['#ff4d6d','#ffd166','#7a2ae8','#ff8aa2'][Math.floor(Math.random()*4)]};}
+function update(){
+  ctx.clearRect(0,0,W,H);
+  for(let i=0;i<particles.length;i++){
+    const p=particles[i];
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x,p.y,p.size,p.size);
+    p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;
+    if(p.y>H){particles[i]=makeParticle();}
+  }
+  requestAnimationFrame(update);
+}
+function startConfetti(){
+  for(let i=0;i<150;i++)particles.push(makeParticle());
+  update();
+}
+
+/* Tim rơi */
+function spawnHeart(){
+  const heart=document.createElement('div');
+  heart.className='heart';
+  heart.style.left=Math.random()*100+'%';
+  heart.style.animationDuration=(5+Math.random()*5)+'s';
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),10000);
+}
+
+/* Nhạc nền */
+const music=document.getElementById("bgMusic");
+const btnMusic=document.getElementById("musicControl");
+let playing=true;
+function playMusic(){
+  music.volume=0.7;
+  music.play().catch(()=>{});
+}
+btnMusic.addEventListener("click",()=>{
+  if(playing){music.pause();btnMusic.textContent="🔇";playing=false;}
+  else{music.play();btnMusic.textContent="🎵";playing=true;}
+});
+</script>
+</body>
+</html>
