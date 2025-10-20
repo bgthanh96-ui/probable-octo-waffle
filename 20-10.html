@@ -1,0 +1,159 @@
+<!doctype html>
+
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chúc mừng 20/10 — Dành cho Crush</title>
+  <style>
+    :root{
+      --bg1:#ff9a9e;--bg2:#fecfef;--card:#fff;
+      --accent:#ff6473;--accent2:#ffb86b;
+      --glass: rgba(255,255,255,0.18);
+    }
+    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    body{
+      background: radial-gradient(1000px 600px at 10% 20%, rgba(255,255,255,0.12), transparent), linear-gradient(135deg,var(--bg1),var(--bg2));
+      display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden;color:#222;
+    }
+    .scene{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));border-radius:20px;padding:28px;box-shadow:0 10px 40px rgba(0,0,0,0.12);backdrop-filter: blur(6px);position:relative;}header{display:flex;gap:18px;align-items:center}
+.logo{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:28px;box-shadow:0 6px 18px rgba(255,100,115,0.18);}
+h1{margin:0;font-size:24px}
+p.lead{margin:6px 0 0 0;color:#5b3b3b}
+
+.card{margin-top:18px;background:var(--card);border-radius:14px;padding:18px;display:flex;gap:18px;align-items:center}
+.portrait{width:140px;height:140px;border-radius:12px;background:linear-gradient(180deg, #fff, #ffeef2);display:flex;align-items:center;justify-content:center;font-size:62px;color:var(--accent);box-shadow:0 10px 30px rgba(255,100,115,0.12);}
+
+.message{flex:1}
+.message h2{margin:0;color:var(--accent);font-size:20px}
+.message p{margin:8px 0 12px 0;line-height:1.5}
+
+.actions{display:flex;gap:12px;align-items:center}
+button{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;padding:10px 14px;border-radius:10px;color:white;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(255,100,115,0.18);}
+button.secondary{background:transparent;border:2px solid rgba(255,100,115,0.12);color:#6b3b3b}
+
+.hearts{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+.heart{position:absolute;width:28px;height:28px;background:linear-gradient(180deg,#fff0,#ff6b81);transform:rotate(-20deg);clip-path:polygon(50% 0%, 61% 12%, 75% 12%, 86% 23%, 86% 38%, 72% 52%, 50% 72%, 28% 52%, 14% 38%, 14% 23%, 25% 12%, 39% 12%);opacity:0;}
+
+/* generate many hearts using JS; subtle float animation */
+@keyframes floatUp{0%{transform:translateY(30vh) scale(0.7) rotate(-10deg);opacity:0}10%{opacity:1}100%{transform:translateY(-110vh) scale(1) rotate(20deg);opacity:0}}
+
+/* responsive */
+@media (max-width:600px){.card{flex-direction:column;align-items:flex-start}.portrait{width:100%;height:120px;border-radius:12px;font-size:44px}}
+
+/* confetti canvas will sit on top */
+canvas.confetti{position:absolute;inset:0;pointer-events:none}
+
+.footer-note{font-size:13px;color:#7b5a5a;margin-top:12px}
+
+  </style>
+</head>
+<body>
+  <div class="scene" role="main">
+    <div class="hearts" aria-hidden="true"></div>
+    <canvas class="confetti"></canvas>
+    <header>
+      <div class="logo">20/10</div>
+      <div>
+        <h1>Gửi lời chúc ngọt ngào tới crush</h1>
+        <p class="lead">Dành tặng một ai đó đặc biệt — hãy chỉnh tên và lời chúc bên dưới.</p>
+      </div>
+    </header><div class="card">
+  <div class="portrait" id="portrait">💖</div>
+  <div class="message">
+    <h2 id="title">Chúc mừng 20/10, <span id="crushName">Crush</span>!</h2>
+    <p id="text">Chúc bạn luôn xinh tươi, nhiều niềm vui và luôn mỉm cười. Mong rằng mỗi ngày đều có điều bất ngờ dễ thương — bắt đầu từ hôm nay nhé! 🌸</p>
+    <div class="actions">
+      <button id="copyBtn">Sao chép lời chúc</button>
+      <button id="shareBtn" class="secondary">Chia sẻ (nếu có hỗ trợ)</button>
+      <button id="confettiBtn">Tổ chức confetti</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">Muốn cá nhân hoá? Nhập tên và lời chúc vào prompt bên dưới và nhấn "Áp dụng".</div>
+
+<div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+  <input id="inputName" placeholder="Tên crush (ví dụ: Linh)" style="padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);flex:1;min-width:160px" />
+  <input id="inputMsg" placeholder="Lời chúc (ngắn gọn)" style="padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);flex:3;min-width:250px" />
+  <button id="applyBtn">Áp dụng</button>
+</div>
+
+  </div>  <script>
+    // generate floating hearts
+    const heartsContainer = document.querySelector('.hearts');
+    const colors = ['#ff6b81','#ff9ab2','#ffd1e0','#ffb3a7'];
+    for(let i=0;i<18;i++){
+      const h = document.createElement('div');
+      h.className='heart';
+      const left = Math.random()*100;
+      const size = 14 + Math.random()*34;
+      h.style.width = size+'px'; h.style.height = size+'px';
+      h.style.left = left+'%';
+      h.style.top = 70 + Math.random()*30 + '%';
+      h.style.background = `linear-gradient(180deg, ${colors[i%colors.length]} 0%, rgba(255,255,255,0.2) 100%)`;
+      h.style.animation = `floatUp ${8+Math.random()*6}s linear ${Math.random()*3}s infinite`; 
+      heartsContainer.appendChild(h);
+    }
+
+    // copy message
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click',async ()=>{
+      const text = document.getElementById('text').innerText;
+      try{ await navigator.clipboard.writeText(text); copyBtn.innerText='Đã sao chép!'; setTimeout(()=>copyBtn.innerText='Sao chép lời chúc',2000);}catch(e){alert('Trình duyệt không cho phép sao chép tự động — hãy bôi đen và sao chép.');}
+    });
+
+    // share (navigator.share)
+    const shareBtn = document.getElementById('shareBtn');
+    shareBtn.addEventListener('click', async ()=>{
+      const title = document.getElementById('title').innerText;
+      const text = document.getElementById('text').innerText;
+      if(navigator.share){
+        try{ await navigator.share({title,text}); }
+        catch(e){}
+      } else { alert('Trình duyệt của bạn không hỗ trợ chức năng chia sẻ.'); }
+    });
+
+    // apply custom text
+    document.getElementById('applyBtn').addEventListener('click', ()=>{
+      const name = document.getElementById('inputName').value.trim();
+      const msg = document.getElementById('inputMsg').value.trim();
+      if(name) document.getElementById('crushName').innerText = name;
+      if(msg) document.getElementById('text').innerText = msg;
+    });
+
+    // confetti simple using canvas
+    const confettiCanvas = document.querySelector('canvas.confetti');
+    const ctx = confettiCanvas.getContext('2d');
+    function resize(){ confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight; }
+    addEventListener('resize', resize); resize();
+
+    function makeConfetti(){
+      const pieces = [];
+      const colors2 = ['#ff6b81','#ffd166','#9ad3bc','#f7a1c4','#ffd1e0'];
+      for(let i=0;i<120;i++){
+        pieces.push({x:innerWidth/2 + (Math.random()-0.5)*300, y:innerHeight/2 + (Math.random()-0.5)*100, vx:(Math.random()-0.5)*8, vy:(Math.random()*-8)-2, r:4+Math.random()*8, c:colors2[i%colors2.length], rot:Math.random()*360, vr: (Math.random()-0.5)*10});
+      }
+      let t=0;
+      function anim(){ ctx.clearRect(0,0,innerWidth,innerHeight); t+=1;
+        for(const p of pieces){ p.vy += 0.25; p.x += p.vx; p.y += p.vy; p.rot += p.vr; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.fillStyle = p.c; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6); ctx.restore(); }
+        if(t<220) requestAnimationFrame(anim);
+      }
+      anim();
+    }
+
+    document.getElementById('confettiBtn').addEventListener('click', ()=>{ makeConfetti(); });
+
+    // small touch: change portrait emoji based on name's first letter
+    const nameInput = document.getElementById('inputName');
+    nameInput.addEventListener('input', ()=>{
+      const v = nameInput.value.trim();
+      const p = document.getElementById('portrait');
+      if(!v){ p.textContent='💖'; return; }
+      const ch = v[0].toLowerCase();
+      const map = {'a':'🌸','b':'🌺','c':'🌷','d':'🌟','e':'💫','h':'🍓','l':'🌼','m':'🌻','s':'💐'};
+      p.textContent = map[ch] || '💖';
+    });
+
+  </script></body>
+</html>
